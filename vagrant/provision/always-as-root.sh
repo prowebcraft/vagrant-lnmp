@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #== Import Common Scripts ==
-source ./common.sh
+source /app/vendor/prowebcraft/vagrant-lnmp/vagrant/provision/common.sh
 
 #== Provision script ==
 say "Provision-script user: `whoami`"

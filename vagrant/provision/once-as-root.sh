@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #== Import Common Scripts ==
-source ./common.sh
+source /app/vendor/prowebcraft/vagrant-lnmp/vagrant/provision/common.sh
 
 #== Import script args ==
 
@@ -25,7 +25,7 @@ debconf-set-selections <<< "mysql-community-server mysql-community-server/re-roo
 echo "Done!"
 
 #say "Set Google Dns"
-sudo apt install resolvconf
+sudo apt-get -y install resolvconf
 sudo systemctl enable --now resolvconf.service
 echo "nameserver 8.8.8.8" | sudo tee /etc/resolvconf/resolv.conf.d/base > /dev/null
 
@@ -33,7 +33,7 @@ say "Install npm packages"
 npm i -g less
 
 say "Install Midnight Commander"
-apt install -y mc
+apt-get install -y mc
 
 say "Configure MySQL"
 cat > /root/.my.cnf << EOF
@@ -42,11 +42,15 @@ user = root
 password = secret
 EOF
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
-mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY 'secret'"
+mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY ''"
 mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'"
-#mysql -uroot <<< "DROP USER 'root'@'localhost'"
+mysql -uroot <<< "DROP USER 'root'@'localhost'"
 mysql -uroot <<< "FLUSH PRIVILEGES"
 echo "Done!"
+cat > /root/.my.cnf << EOF
+[client]
+user = root
+EOF
 
 say "Configure php.ini for CLI"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/8.0/cli/php.ini
@@ -111,4 +115,4 @@ say "Install composer"
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 say "Install zsh"
-sudo apt -y install zsh
+sudo apt-get install zsh -y

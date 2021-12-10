@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #== Import Common Scripts ==
-source ./common.sh
+source /app/vendor/prowebcraft/vagrant-lnmp/vagrant/provision/common.sh
 
 #== Import script args ==
 github_token=$(echo "$1")
@@ -35,6 +35,7 @@ echo 'vagrant' | chsh -s $(which zsh)
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git config --global --add oh-my-zsh.hide-status 1
 git config --global status.showuntrackedfiles no
+git config --global --add oh-my-zsh.hide-dirty 1
 
 say "Auto navigate to /app at login"
 echo 'cd /app' | tee -a ~/.zshrc
@@ -43,5 +44,4 @@ say "Config MySQL Client"
 cat > ~/.my.cnf << EOF
 [client]
 user = root
-password = secret
 EOF
