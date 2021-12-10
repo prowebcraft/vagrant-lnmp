@@ -80,6 +80,12 @@ printf "openssl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php
 printf "[curl]\n" | tee -a /etc/php/8.0/fpm/php.ini
 printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/8.0/fpm/php.ini
 
+say "Installing mcrypt extension"
+sudo apt-get -y install libmcrypt-dev
+sudo pecl install mcrypt-1.0.4
+sudo bash -c "echo extension=/usr/lib/php/20200930/mcrypt.so > /etc/php/8.0/cli/conf.d/mcrypt.ini"
+sudo bash -c "echo extension=/usr/lib/php/20200930/mcrypt.so > /etc/php/8.0/fpm/conf.d/mcrypt.ini"
+
 say "Enabling PHP8"
 update-alternatives --set php /usr/bin/php8.0
 update-alternatives --set php-config /usr/bin/php-config8.0
