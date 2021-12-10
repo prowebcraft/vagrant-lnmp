@@ -1,0 +1,14 @@
+{
+    "name": "prowebcraft/vagrant-lnmp",
+    "description": "LNMP Vagrant Configuration based on Homestead box image",
+    "type": "library",
+    "license": "GNU",
+    "authors": [
+        {
+            "name": "Andrey Mistulov",
+            "email": "prowebcraft@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
