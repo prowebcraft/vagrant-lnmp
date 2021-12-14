@@ -34,7 +34,6 @@ say "Configure MySQL"
 cat > /root/.my.cnf << EOF
 [client]
 user = root
-password = secret
 EOF
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
 mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY ''"
@@ -42,10 +41,6 @@ mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'"
 mysql -uroot <<< "DROP USER 'root'@'localhost'"
 mysql -uroot <<< "FLUSH PRIVILEGES"
 echo "Done!"
-cat > /root/.my.cnf << EOF
-[client]
-user = root
-EOF
 
 say "Configure php.ini for CLI"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/8.0/cli/php.ini
@@ -75,12 +70,6 @@ printf "openssl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php
 printf "[curl]\n" | tee -a /etc/php/8.0/fpm/php.ini
 printf "curl.cainfo = /etc/ssl/certs/ca-certificates.crt\n" | tee -a /etc/php/8.0/fpm/php.ini
 
-say "Installing mcrypt extension"
-sudo apt-get -y install libmcrypt-dev
-sudo pecl install mcrypt-1.0.4
-sudo bash -c "echo extension=/usr/lib/php/20200930/mcrypt.so > /etc/php/8.0/cli/conf.d/mcrypt.ini"
-sudo bash -c "echo extension=/usr/lib/php/20200930/mcrypt.so > /etc/php/8.0/fpm/conf.d/mcrypt.ini"
-
 say "Enabling PHP8"
 update-alternatives --set php /usr/bin/php8.0
 update-alternatives --set php-config /usr/bin/php-config8.0
@@ -96,6 +85,12 @@ sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/8.0/fpm/pool.d/www.conf
 
 systemctl enable php8.0-fpm
 service php8.0-fpm restart
+
+say "Installing mcrypt extension"
+sudo apt-get -y install libmcrypt-dev
+sudo pecl install mcrypt-1.0.4
+sudo bash -c "echo extension=/usr/lib/php/20200930/mcrypt.so > /etc/php/8.0/cli/conf.d/mcrypt.ini"
+sudo bash -c "echo extension=/usr/lib/php/20200930/mcrypt.so > /etc/php/8.0/fpm/conf.d/mcrypt.ini"
 
 say "Configure NGINX"
 sed -i 's/user www-data/user vagrant/g' /etc/nginx/nginx.conf
