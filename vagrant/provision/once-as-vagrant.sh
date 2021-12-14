@@ -18,12 +18,6 @@ say "Install project dependencies"
 cd /app || exit
 composer --no-progress --prefer-dist install
 
-say "Init project"
-php ./init --env=Development --overwrite=y
-
-say "Apply migrations"
-php ./yii migrate --interactive=0
-
 say "Create bash-alias 'app' for vagrant user"
 echo 'alias app="cd /app"' | tee ~/.bash_aliases
 

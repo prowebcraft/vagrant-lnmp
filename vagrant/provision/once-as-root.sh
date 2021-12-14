@@ -34,6 +34,7 @@ say "Configure MySQL"
 cat > /root/.my.cnf << EOF
 [client]
 user = root
+password = secret
 EOF
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
 mysql -uroot <<< "CREATE USER 'root'@'%' IDENTIFIED BY ''"
@@ -41,6 +42,12 @@ mysql -uroot <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'"
 mysql -uroot <<< "DROP USER 'root'@'localhost'"
 mysql -uroot <<< "FLUSH PRIVILEGES"
 echo "Done!"
+
+say "Configure MySQL"
+cat > /root/.my.cnf << EOF
+[client]
+user = root
+EOF
 
 say "Configure php.ini for CLI"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/8.0/cli/php.ini
@@ -101,10 +108,6 @@ cp /app/vagrant/nginx/yii2_loc.conf /etc/nginx/yii2_loc.conf
 cp /app/vagrant/nginx/app.conf /etc/nginx/sites-enabled/app.conf
 sed -i "s/extra_hostname/$extra_hostname/g" /etc/nginx/sites-enabled/app.conf
 
-echo "Done!"
-
-say "Initailize databases for MySQL"
-mysql -uroot <<< "CREATE DATABASE wts CHARACTER SET utf8 COLLATE utf8_general_ci"
 echo "Done!"
 
 say "Install composer"
