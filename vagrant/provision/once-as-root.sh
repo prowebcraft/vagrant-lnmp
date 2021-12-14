@@ -19,12 +19,7 @@ export DEBIAN_FRONTEND=noninteractive
 say "Configure timezone"
 timedatectl set-timezone "${timezone}" --no-ask-password
 
-say "Prepare root password for MySQL"
-debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password \"''\""
-debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password \"''\""
-echo "Done!"
-
-#say "Set Google Dns"
+say "Set Google Dns"
 sudo apt-get -y install resolvconf
 sudo systemctl enable --now resolvconf.service
 echo "nameserver 8.8.8.8" | sudo tee /etc/resolvconf/resolv.conf.d/base > /dev/null
